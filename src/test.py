@@ -15,8 +15,6 @@ def main():
     # Define constants for the screen width and height
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 800
-    fps = 60
-    fpsClock = pygame.time.Clock()
 
     matSize = (6,7)
     recSize = (700,700)
@@ -41,14 +39,12 @@ def main():
 
         # Fill the background with white
         screen.fill((255, 255, 255))
-        board.posX = mouse[0]
-        board.posY = mouse[1]
+        
         board.update(screen)
 
 
         # Flip the display
         pygame.display.flip()
-        fpsClock.tick(fps)
 
     # Done! Time to quit.
     pygame.quit()

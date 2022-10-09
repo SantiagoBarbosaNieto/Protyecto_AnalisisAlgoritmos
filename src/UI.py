@@ -2,9 +2,11 @@ from tkinter import font
 import pygame
 
 class Button():
-    def __init__(self, x, y, width, height, fontsize = 15,buttonText='Button', onclickFunction=None, onePress=False):
-        self.x = x
-        self.y = y
+    def __init__(self, boardX, boardY, xOffset, yOffset, width, height, fontsize = 15,buttonText='Button', onclickFunction=None, onePress=False):
+        self.x = boardX
+        self.y = boardY
+        self.xOffset = xOffset
+        self.yOffset = yOffset
         self.width = width
         self.height = height
         self.onePress = onePress
@@ -20,7 +22,7 @@ class Button():
         }
     
         self.buttonSurface = pygame.Surface((self.width, self.height))
-        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.buttonRect = pygame.Rect(self.x + self.xOffset, self.y + self.yOffset, self.width, self.height)
 
         self.buttonSurf =  pygame.font.SysFont('Arial', self.fontsize).render(buttonText, True, (20, 20, 20))
     
@@ -48,6 +50,12 @@ class Button():
     def setText(self, text):
         self.buttonText = text
         self.buttonSurf =  pygame.font.SysFont('Arial', self.fontsize).render(self.buttonText, True, (20, 20, 20))
+    
+    def setPos(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.buttonRect = pygame.Rect(self.x+self.xOffset, self.y+self.yOffset, self.width, self.height)
+
 
 
 class Board:
@@ -68,13 +76,20 @@ class Board:
     def generateButtons(self):
         for i in range(self.cols):
             for j in range( self.rows):
-                x = self.posX+1+i*self.butSizeX+i
-                y = self.posY +1+ j*self.butSizeY+j
-                b = Button(x,y, self.butSizeX, self.butSizeY, 20, '-', self.handleButtons)
+                x = 1+i*self.butSizeX+i
+                y = 1+ j*self.butSizeY+j
+                b = Button(self.posX, self.posY, x,y, self.butSizeX, self.butSizeY, 20, '-', self.handleButtons)
                 self.buttons.append(b)
     
     def handleButtons(self, but):
         self.handleButs(but)
+    
+    def updatePos(self, pos):
+        self.posX = pos[0]
+        self.posY = pos[1]
+        self.backgroundRect = pygame.Rect(self.posX, self.posY, self.width, self.height)
+        for b in self.buttons:
+            b.setPos(pos)
 
     def update(self, screen):
         pygame.draw.rect(screen, (20,20,20), self.backgroundRect)
