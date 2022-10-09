@@ -3,15 +3,36 @@
 # Import and initialize the pygame library
 import pygame
 import UI as ui
+import cProfile
 
+selectedNum : str = ''
+
+
+def selectNum(but):
+    if but != None:
+        global selectedNum
+        selectedNum = but.buttonText
 
 def handle(but):
     if but != None:
-        but.setText("Hola")
+        but.setText(selectedNum)
+
+
+def do_cprofile(func):
+    def profiled_func(*args, **kwargs):
+        profile = cProfile.Profile()
+        try:
+            profile.enable()
+            result = func(*args, **kwargs)
+            profile.disable()
+            return result
+        finally:
+            profile.print_stats()
+    return profiled_func
 
 def main():
-    
     pygame.init()
+    pygame.display.set_caption('Connect')
     # Define constants for the screen width and height
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 800
@@ -20,7 +41,9 @@ def main():
     recSize = (700,700)
     pos = (50,50)
 
-    board = ui.Board(matSize, pos, recSize, handle)
+    numbers:list = ["0","1","2","3","4","5","6","7","8","9","-"]
+    nums = ui.Board((1,11), (850,75), (60,650), numbers,selectNum)
+    board = ui.Board(matSize, pos, recSize,[], handle)
     # Set up the drawing window
     screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
@@ -41,6 +64,7 @@ def main():
         screen.fill((255, 255, 255))
         
         board.update(screen)
+        nums.update(screen)
 
 
         # Flip the display
