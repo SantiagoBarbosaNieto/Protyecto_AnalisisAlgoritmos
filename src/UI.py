@@ -92,6 +92,7 @@ class Board:
         self.butSizeY = (self.height-(self.rows+1))/self.rows
         self.handleButs = handleButs
         self.generateButtons(nums)
+        self.buttons[0].select()
         self.selectedBut = self.buttons[0]
 
     def generateButtons(self, nums: list):

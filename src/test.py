@@ -4,8 +4,9 @@
 import pygame
 import UI as ui
 import cProfile
+import numpy as np
 
-selectedNum : str = ''
+selectedNum : str = '0'
 
 
 def selectNum(but):
@@ -37,10 +38,10 @@ def main():
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 800
 
-    matSize = (6,7)
+    matSize = (10,7)
     recSize = (700,700)
     pos = (50,50)
-
+    
     numbers:list = ["0","1","2","3","4","5","6","7","8","9","-"]
     nums = ui.Board((1,11), (850,75), (60,650), numbers,selectNum)
     board = ui.Board(matSize, pos, recSize,[], handle)
