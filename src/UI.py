@@ -102,7 +102,7 @@ class Board:
         estado = true
         aux = archivo.read(5)
         if estado == true:
-            self.matSize(aux)
+            matResize=self.matSize(aux)
 
     def generateButtons(self, nums: list):
         for i in range(self.cols):
