@@ -38,7 +38,7 @@ def main():
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 800
 
-    matSize = (10,7)
+    matSize = (7,7)
     recSize = (700,700)
     pos = (50,50)
     

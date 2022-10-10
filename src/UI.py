@@ -1,4 +1,5 @@
 
+from operator import truediv
 import pygame
 import cProfile
 
@@ -61,6 +62,8 @@ class Button():
         ])
         screen.blit(self.buttonSurface, self.buttonRect)
     
+            
+
     def setText(self, text):
         self.buttonText = text
         self.buttonSurf =  pygame.font.SysFont('Arial', self.fontsize).render(self.buttonText, True, (20, 20, 20))
@@ -94,6 +97,11 @@ class Board:
         self.generateButtons(nums)
         self.buttons[0].select()
         self.selectedBut = self.buttons[0]
+    def cargarImg(self, image):
+        archivo = open("Ejemplo.txt","r")
+        estado = true
+        aux = archivo.read(5)
+        
 
     def generateButtons(self, nums: list):
         for i in range(self.cols):
