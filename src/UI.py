@@ -1,22 +1,10 @@
 
 from operator import truediv
 import pygame
-import cProfile
-
-def do_cprofile(func):
-    def profiled_func(*args, **kwargs):
-        profile = cProfile.Profile()
-        try:
-            profile.enable()
-            result = func(*args, **kwargs)
-            profile.disable()
-            return result
-        finally:
-            profile.print_stats()
-    return profiled_func
+import numpy as np
 
 class Button():
-    def __init__(self, id, boardX, boardY, xOffset, yOffset, width, height, fontsize = 15,buttonText='Button', onclickFunction=None, onePress=False):
+    def __init__(self, id, boardX, boardY, xOffset, yOffset, width, height, fontsize = 15,buttonText='-', onclickFunction=None, selectable = False):
         self.id = id
         self.x = boardX
         self.y = boardY
@@ -24,17 +12,37 @@ class Button():
         self.yOffset = yOffset
         self.width = width
         self.height = height
-        self.onePress = onePress
+        self.onePress = False
         self.alreadyPressed = False
         self.buttonText = buttonText
         self.onclickFunction = onclickFunction
         self.fontsize = fontsize
-
+        self.selectable = selectable
+        self.numColors = {
+            '-': '#ffffff',
+            '0': '#ff0d00',
+            '1': '#ff8000',
+            '2': '#fbff00',
+            '3': '#99d17b',
+            '4': '#00ffcc',
+            '5': '#008cff',
+            '6': '#8800ff',
+            '7': '#ff00e6',
+            '8': '#734719',
+            '9': '#66968a',
+        }
+        try:
+            color = self.numColors[buttonText]
+        except:
+            color = "#ffffff"
+        if selectable:
+            color = "#ffffff"
         self.fillColors = {
-            'normal':  '#ffffff',
+            'normal':  color,
             'hover':   '#90f598',
             'pressed': '#333333'
         }
+
     
         self.buttonSurface = pygame.Surface((self.width, self.height))
         self.buttonRect = pygame.Rect(self.x + self.xOffset, self.y + self.yOffset, self.width, self.height)
@@ -67,22 +75,26 @@ class Button():
     def setText(self, text):
         self.buttonText = text
         self.buttonSurf =  pygame.font.SysFont('Arial', self.fontsize).render(self.buttonText, True, (20, 20, 20))
-    
+        if(not self.selectable):
+            self.fillColors['normal'] = self.numColors[text]
+
     def setPos(self, pos):
         self.x = pos[0]
         self.y = pos[1]
         self.buttonRect = pygame.Rect(self.x+self.xOffset, self.y+self.yOffset, self.width, self.height)
     
     def select(self):
-        self.fillColors['normal'] = '#0fe21f'
+        if self.selectable:
+            self.fillColors['normal'] = '#0fe21f'
 
     def unselect(self):
-        self.fillColors['normal'] = '#ffffff'
+        if self.selectable:
+            self.fillColors['normal'] = '#ffffff'
 
 
 class Board:
 
-    def __init__(self, matSize: tuple, position : tuple, areaSize: tuple, nums:list, handleButs=None):
+    def __init__(self, matSize: tuple, position : tuple, areaSize: tuple, nums:np.mat, selectable, handleButs=None):
         self.cols = matSize[0]
         self.rows = matSize[1]
         self.posX = position[0]
@@ -94,32 +106,31 @@ class Board:
         self.butSizeX = (self.width-(self.cols+1))/self.cols
         self.butSizeY = (self.height-(self.rows+1))/self.rows
         self.handleButs = handleButs
+        self.selectable = selectable
         self.generateButtons(nums)
-        self.buttons[0].select()
-        self.selectedBut = self.buttons[0]
-    def cargarImg(self, image):
-        archivo = open("Ejemplo.txt","r")
-        estado = true
-        aux = archivo.read(5)
-        if estado == true:
-            matResize=self.matSize(aux)
+        if(self.selectable):
+            self.buttons[0].select()
+            self.selectedBut = self.buttons[0]
+   
 
-    def generateButtons(self, nums: list):
+    def generateButtons(self, nums: np.mat):
+        self.buttons.clear()
         for i in range(self.cols):
             for j in range( self.rows):
-                if len(nums) > 0:
-                    txt = nums[i+j*self.cols]
+                if nums[i][j] != -np.inf:
+                    txt = int(nums[i][j])
                 else:
                     txt = '-'
                 x = 1+i*self.butSizeX+i
                 y = 1+ j*self.butSizeY+j
-                b = Button(i,self.posX, self.posY, x,y, self.butSizeX, self.butSizeY, 20, str(txt), self.handleButtons)
+                b = Button(i,self.posX, self.posY, x,y, self.butSizeX, self.butSizeY, 20, str(txt), self.handleButtons, self.selectable)
                 self.buttons.append(b)
     
     def handleButtons(self, but):
-        self.selectedBut.unselect()
-        but.select()
-        self.selectedBut = but
+        if self.selectable:
+            self.selectedBut.unselect()
+            but.select()
+            self.selectedBut = but
         self.handleButs(but)
     
     def updatePos(self, pos):
@@ -133,6 +144,11 @@ class Board:
         pygame.draw.rect(screen, (20,20,20), self.backgroundRect)
         for but in self.buttons:
             but.process(screen)
+
+    def reset(self):
+        mat = np.zeros((self.cols,self.rows))
+        mat.fill(-np.inf)
+        self.generateButtons(mat)
         
     
 
