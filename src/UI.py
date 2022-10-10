@@ -101,7 +101,8 @@ class Board:
         archivo = open("Ejemplo.txt","r")
         estado = true
         aux = archivo.read(5)
-        
+        if estado == true:
+            self.matSize(aux)
 
     def generateButtons(self, nums: list):
         for i in range(self.cols):
