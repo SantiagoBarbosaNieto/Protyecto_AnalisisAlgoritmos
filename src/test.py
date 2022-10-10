@@ -4,6 +4,7 @@
 import pygame
 import UI as ui
 import numpy as np
+import pathlib
 
 selectedNum : str = '0'
 
@@ -17,8 +18,9 @@ def handle(but):
         but.setText(selectedNum)
 
 def cargarMat(path):
+    prePath = pathlib.Path(__file__).parent.resolve()
     try:
-        with open(path) as f:
+        with open(str(prePath)+"\\"+path) as f:
             lines = f.readlines()
         primera= lines[0]
         primera = primera.split('\n')[0]
@@ -67,7 +69,9 @@ def main():
     SCREEN_WIDTH = 1200
     SCREEN_HEIGHT = 800
 
-    mat = cargarMat("Ejemplo.txt")
+    global path
+    path = 'Ejemplo.txt'
+    mat = cargarMat(path)
     matSize = mat.shape
     recSize = (700,700)
     pos = (50,50)
@@ -98,8 +102,6 @@ def main():
     color_active = pygame.Color('dodgerblue2')
     color_txtBox = color_inactive
     active = False
-    global path
-    path = ''
     font = pygame.font.Font(None, 32)
     
     # Run until the user asks to quit
