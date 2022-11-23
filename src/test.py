@@ -61,7 +61,37 @@ def loadGame(but):
 
 def resolverGame(but):
     print("resolver")
-
+    
+def jugar(but):
+    mat = cargarMat(path)
+    for i in range(7):
+        for j in range(7):
+            if mat[i][j]== int:
+                aux=mat[i][j]
+                if mat[i][j+1] =='-' and mat[i][j-1]=='-' and mat[i+1][j]=='-' and mat[i-1][j]=='-':
+                    salidas=4
+                elif mat[i][j+1] and mat[i][j-1] and mat[i+1][j]=='-' or mat[i+1][j] and mat[i-1][j] and mat[i][j+1] =='-' or mat[i][j+1] and mat[i][j-1] and mat[i-1][j]=='-' or mat[i][j-1] and mat[i+1][j] and mat[i-1][j]=='-':
+                    salidas=3
+                elif mat[i][j+1] and mat[i][j-1]=='-'or mat[i+1][j] and mat[i-1][j]=='-' or mat[i-1][j] and mat[i][j+1]=='-' or mat[i-1][j] and mat[i][j-1]=='-' or mat[i+1][j] and mat[i][j+1]=='-':
+                    salidas=2
+                elif mat[i][j+1] =='-' or mat[i][j-1] or mat[i+1][j] or mat[i-1][j]:
+                    salidas=1 
+            if salidas <=2:
+                esFijo= True
+            else:
+                esFijo=False  
+            if esFijo==True:
+                if mat[i][j+1]=='-':
+                    mat[i][j+1]=aux
+                if mat[i][j-1]=='-':
+                    mat[i][j-1]=aux
+                if mat[i+1][j]=='-':
+                    mat[i+1][j]=aux
+                if mat[i-1][j]=='-':
+                    mat[i-1][j]=aux
+                
+            
+                
 def main():
     pygame.init()
     pygame.display.set_caption('Connect')
