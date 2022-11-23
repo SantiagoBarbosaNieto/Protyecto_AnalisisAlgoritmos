@@ -65,7 +65,16 @@ def cargarMat(path):
 
 def resetGame(but):
     global board
+    global matPosibilidades
+    global posibilidades
+    global originales
+    global mat
     board.reset()
+    matPosibilidades = {}
+    posibilidades = set()
+    originales = set()
+    mat = np.zeros(mat.shape)
+    mat.fill(-np.inf)
     print("Reset")
 
 def loadGame(but):
@@ -140,7 +149,6 @@ def updateMat():
     board.generateButtons(mat)
 
 def resolverGame(but):
-    cargarMat(path)
     generarMatBot()
     global mat
     global matPosibilidades
@@ -224,6 +232,9 @@ def resolverGame(but):
                         setFinal = setSal1.intersection(setSal2)
                         matPosibilidades[(i,j)] = list(setFinal)
         print(matPosibilidades)
+        if iter == 200:
+            print("Ya realizo demasidas iteraciones, debe estar atastcado o es imposible de resolver... saliendo")
+            break
     #actualice mat con matPosibilidades que ya estan fijas
     updateMat()
 
