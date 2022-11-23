@@ -242,7 +242,7 @@ def resolverGame(but):
                 
 def main():
     pygame.init()
-    pygame.display.set_caption('Connect')
+    pygame.display.set_caption('Arukone')
     # Define constants for the screen width and height
     SCREEN_WIDTH = 1200
     SCREEN_HEIGHT = 800
