@@ -41,6 +41,7 @@ def cargarMat(path):
         x = int(primera_nums[0])
         y = int(primera_nums[2])
     except:
+        print("No pudo ser leido el archivo.. Cargando matriz default")
         x=7
         y=7
         mat = np.zeros((x,y))
@@ -60,7 +61,7 @@ def cargarMat(path):
             originales.add((x-1, y-1))
         except:
             continue
-    print("terminar")
+    print("Cargado")
 
 
 def resetGame(but):
